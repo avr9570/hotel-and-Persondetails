@@ -1,8 +1,7 @@
 Git & GitHub
 Git is like a time machine for your code.
 It is a tool that keeps a record of every version of your code, so you can always go back to a previous state if something goes wrong.
-Install Git: If you haven't already, download and install Git on your computer. You can get it from the official Git website:
-https://git-scm.com/downloads
+Install Git: If you haven't already, download and install Git on your computer. You can get it from the official Git website
 If you want to work with git in your project→
 Run git init inside the root folder of your project
 This command tells Git to start tracking changes in your project folder.turns all files to green. it means it is watching all the folder and taking a look ki what changes are being done what file id added but not commiting it. its like adding tracker to all the folder
@@ -22,7 +21,9 @@ These ignored files and directories won't be tracked by Git or included in versi
 Create.gitignore File
 #Ignore node_modules directory
 node_modules/
-# other entries
+#other entries
 
 ~ this savea a snapshot of your project's current state.
 git commit -m "initial commit"
+
+~to remove node_modules after adding it to git add. is = git rm -r --cached node_modules
