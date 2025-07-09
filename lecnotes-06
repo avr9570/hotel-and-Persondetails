@@ -1,0 +1,311 @@
+/* 
+Databases typically have their own server systems to manage and provide access to the data they store. 
+These database server systems are separate from Node.js servers but work together to create dynamic and data-driven web applications.
+
+Node.js Server and Database Server:
+1. A database server is a specialized computer program or system that manages databases. It stores, retrieves, and manages data efficiently 
+2. The database server stores your application's data. When your Node.js server needs data, it sends requests to the database server, which then retrieves and sends the requested data back to the Node.js server.
+*/
+Node.js server is responsible for handling HTTP requests from clients (like web browsers) and returning responses. 
+It processes these requests, communicates with the database server, and sends data to clients.
+difference between sql and no sql
+table = collection
+indivvidual entry (called row/record) = document
+coloumn = field
+syntax:
+db.createCollection("name");
+db.users.insertOne({ id:1, username: 'alice', roll:25});
+db.users.find({age: { $gt: 21}}); --- to get all the documents in db whose age>21 similar to select * from command in sql
+db.users.updateOne({username: 'alice'}, { $set: { age: 25}});
+mongodb compass - if your db server is up then it help to visualise and interact with db.
+mongo.user.
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+What is body-parser 
+~bodyParser is a middleware library for Express.js. 
+~It is used to parse and extract the body of incoming HTTP requests. 
+~When a client (e.g., a web browser or a mobile app) sends data to a server, it typically includes that data in the body of an HTTP request. 
+~This data can be in various formats, such as JSON, form data, or URL-encoded data. bodyParser helps parse and extract this data from the request so that you can work with it in your Express.js application. 
+~bodyParser processes the request body before it reaches your route handlers, making the parsed data available in the req.body for further processing.  
+~bodyParser.json() automatically parses the JSON data from the request body and converts it into a JavaScript object, which is then stored in the req.body. 
+~"https://youtube.com/shorts/LSDy9DfRN3U?si=QmSmukpkPk9fY_ZV" - See this video if have doubts
+~Express.js uses lots of middleware and to use middleware we use the app.use:
+~const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+//while saving the documents always we dont use call back function with .save(); function as it is complex we use ASYNC and AWAIT.
+Async and Await 
+Nowadays no one uses callback functions like, we used in the POST methods They look quite complex and also do not give us code readability. 
+What actually callback does, callback is a function that is executed just after the execution of another main function, it means the callback will wait until its main function is not executed. A callback is simply a function passed as an argument to another function, to be called later when the task is complete.
+Async and await are features in JavaScript that make it easier to work with asynchronous code, such as network requests, file system operations, or database queries. 
+Using try and catch block 
+The try block contains the code for creating a new Person document and saving it to the database using await newPerson.save(). 
+If an error occurs during any step, it is caught in the catch block, and an error response is sent with a 500 Internal Server Error status
+
+async/await:
+
+newPerson.save((error, savedPerson) => {
+  if (error) {
+    console.error('Error saving person:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  } else {
+    console.log('Data saved');
+    res.status(201).json(savedPerson);
+  }
+});
+
+--------------------------------------
+(error, savedPerson) => {
+  if (error) {
+    console.error('Error saving person:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  } else {
+    console.log('Data saved');
+    res.status(201).json(savedPerson);
+  }
+}
+This function is passed as an argument to .save():
+newPerson.save(<-- callback function is here -->)
+🔁 How is it working?
+newPerson.save() is an asynchronous operation provided by Mongoose. It attempts to save the newPerson document to MongoDB.
+Once Mongoose completes the operation (successfully or with an error), it automatically calls the callback function you passed.
+The callback receives two parameters:
+error: non-null if something went wrong (e.g., validation failed, database issue).
+savedPerson: the document that was saved, returned by MongoDB.
+
+The callback function is (error, savedPerson) => { ... }
+
+It's called automatically by .save() after trying to save the document.
+
+It handles both success and failure, using the values passed to it (error, savedPerson).
+newPerson.save() is the main function
+It starts the operation to save the document to MongoDB.
+It's asynchronous, so it doesn’t immediately return the result.
+Instead, it expects a callback function to be provided.
+.save() does the actual saving.
+The callback only waits for the result, and responds accordingly.
+ASYNC/ AWAIT:
+// Example inside an Express route
+app.post('/add-person', async (req, res) => {
+  const newPerson = new Person(req.body); // assuming req.body has person data
+
+  try {
+    const savedPerson = await newPerson.save();
+    console.log('Data saved');
+    res.status(201).json(savedPerson);
+  } catch (error) {
+    console.error('Error saving person:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+await newPerson.save() → waits for the DB operation to finish i.e to save.
+If it succeeds, savedPerson is returned.
+If it fails, it throws an error that’s caught in the catch block.
+async and await are JavaScript features that help you write asynchronous code in a clean and readable way, without using callbacks or .then() chains.
+They are used to wait for a promise to finish before moving to the next line.
+async makes a function return a Promise and allows use of await inside it.
+await pauses the function until the Promise resolves or rejects.
+If it succeeds, you get the result.
+If it fails, it throws an error that you can catch with try...catch.
+---------
+const savedPerson = await newPerson.save();
+This line waits for Mongoose to save the new person to the database.
+
+If saving is successful, the result (saved document) is stored in savedPerson.
+
+If there’s an error (like DB down or validation fail), it jumps to the catch block.
+----------
+try { ... } catch (error) { ... }
+Wraps the code to safely catch errors.
+
+If the await operation fails, it goes directly to the catch block.
+---------
+A Promise is a JavaScript object that represents a value that might not be ready yet 
+await newPerson.save();
+The .save() method (from Mongoose) returns a Promise.
+That means:
+
+It starts the database operation.
+
+Returns immediately with a Promise object.
+
+That Promise will resolve when the DB operation finishes
+-----------
+when does await wait?
+Only when the function you're calling returns a Promise.
+
+Mongoose's .save() does exactly that:
+
+It returns a Promise.
+
+You can await it.
+
+When the DB finishes saving, the Promise is resolved with the saved data.
+--------------
+newPerson.save()	Starts DB save and returns a Promise
+await	Pauses until the Promise finishes
+-----------------------
+ const savedPerson = await newPerson.save();
+Calls .save() to insert the new document into your MongoDB database.
+
+await means: "wait here until saving is done."
+
+If successful, the saved document (with _id, timestamps, etc.) is stored in savedPerson.
+
+✅ res.status(201).json(savedPerson);
+If everything worked, this sends a 201 Created status back to the client.
+
+Along with the JSON data of the saved person.
+-----------------
+| Part                        | Meaning                                    |
+| --------------------------- | ------------------------------------------ |
+| `async (req, res)`          | Allows use of `await` inside               |
+| `new Person(req.body)`      | Create a new person document               |
+| `await newPerson.save()`    | Save it to the database (waits for result) |
+| `try { ... } catch { ... }` | Handle both success and error cleanly      |
+| `res.status().json()`       | Send response to client                    |
+
+const savedPerson = await newPerson.save();  -------   This is the database operation that takes time.
+newPerson.save()
+This line tells Mongoose to:
+
+Connect to your MongoDB database (if not already connected).
+
+Take the data in newPerson.
+
+Send it over the network to MongoDB.
+
+Ask MongoDB to insert this data into a collection (like a table).
+
+Wait for MongoDB to respond back — with success or error.
+---------------------
+Why does it take time?
+Because it's not a local calculation — it's a remote operation involving:
+
+Network request to the MongoDB server.
+
+MongoDB doing disk I/O (writing to disk).
+
+Sending the result back to your server.
+
+These steps happen asynchronously, meaning your program shouldn’t freeze while waiting.
+---------------------
+Without await, JavaScript would keep going before the save is done — possibly causing bugs.
+So, we write:
+await newPerson.save()
+To pause and wait until the DB says:
+“OK, person saved!”
+----------------
+JavaScript runs on a single thread, which means it can only do one thing at a time. But it’s smart — it uses asynchronous operations like Promises and callbacks to handle slow tasks (like saving to a database) without stopping everything else.
+What Happens Without await:
+const savedPerson = newPerson.save();  // ❌ missing 'await'
+console.log("Data saved:", savedPerson);
+You might think savedPerson now contains the actual saved data. But NO — it contains a Promise — not the actual data.
+Example output:
+Data saved: Promise { <pending> }
+Why? Because .save() starts the DB operation asynchronously and returns immediately — without waiting for the database to finish saving.
+So JavaScript keeps going to the next line (console.log(...)) before the data is saved.
+
+Real-World Problem Without await:
+const savedPerson = newPerson.save(); // ❌ Promise, not the real data
+res.status(201).json(savedPerson);    // sends incomplete/invalid response
+
+Here, you're trying to send a response to the client using a Promise object, not the actual saved person — which is a bug. The response might fail, be empty, or confusing.
+
+What Happens With await:
+const savedPerson = await newPerson.save();  // ✅ wait for actual result
+res.status(201).json(savedPerson);           // ✅ send real saved data
+Here:
+JavaScript pauses at the await line.
+It waits until the MongoDB .save() finishes successfully.
+Only then, it stores the result in savedPerson.
+And continues to the next line — sending correct data to the client.
+So the flow is guaranteed to be correct.
+---------------
+without await:
+"Hey DB, save this!"
+JS: "Cool, I'm not waiting, moving on..."
+
+with awwait:
+"Hey DB, save this!"
+JS: "Ok, I'll wait right here till you finish."
+DB: "Done saving!"
+JS: "Thanks! Now I'll continue."
+----------------
+how does await knows db operations are done saving?
+await waits for a Promise.
+When .save() is called, Mongoose returns a Promise, and that Promise resolves when MongoDB confirms the save is done.
+const savedPerson = await newPerson.save();
+.save() returns a Promise
+Mongoose is built using asynchronous code. Its .save() method:
+Begins sending the person data to MongoDB.
+Immediately returns a Promise that says:
+"I promise to let you know when saving is finished."
+
+await pauses execution
+await sees that .save() returned a Promise.
+JavaScript pauses at that line and waits until the Promise is resolved.
+This does not block other code from running on the server (non-blocking).
+
+MongoDB responds
+MongoDB finishes writing the document to disk.
+Mongoose gets a response: “✅ Save successful”.
+So the Promise is resolved with the saved document. or If something goes wrong (e.g., duplicate key), the Promise is rejected with an error.
+
+await resumes
+If resolved: await gives you the saved result.
+If rejected: it throws an error, which you catch in try/catch.
+---------------
+How does MongoDB respond that saving is successful, so that the Promise is resolved? And how does await know that?"
+➡️ MongoDB sends a response over the network when the save is complete.
+➡️ Mongoose receives it, and resolves or rejects the Promise.
+➡️ await simply waits for that Promise to settle (resolve or reject).
+➡️ All of this happens internally — behind the scenes.
+
+newPerson.save() is a Mongoose function.
+Mongoose builds a write query and sends it to MongoDB using a network protocol (usually over TCP).
+✉️ MongoDB receives a "save this document" request.
+MongoDB does its job
+It validates the data.
+It writes the data to disk.
+It adds metadata (like _id, timestamps).
+It sends a response back to Mongoose:
+{
+  acknowledged: true,
+  insertedId: "6654909f...",
+  status: "OK"
+}
+This is a JSON-like response over a protocol called MongoDB Wire Protocol.
+Mongoose receives the response
+Mongoose (which is running on your Node.js server):
+Listens for MongoDB’s response.
+When the response is received:
+If success: Mongoose resolves the Promise.
+If failure (duplicate key, etc): rejects the Promise.
+JavaScript’s await sees the Promise result
+JavaScript:
+Paused at the line await newPerson.save();
+When Mongoose resolves the Promise, await gets the result.
+JavaScript resumes execution at the next line with the resolved value.
+| Component          | What it does                                                                  |
+| ------------------ | ----------------------------------------------------------------------------- |
+| `newPerson.save()` | Starts the DB write and returns a Promise                                     |
+| MongoDB            | Performs the save and sends a response back                                   |
+| Mongoose           | Listens to MongoDB response and resolves/rejects the Promise                  |
+| `await`            | Waits silently until the Promise is settled (internally handled by JS engine) |
+
+----------------------------------------------------------------------------------------
+Aync function (async):
+as async function is a function that is designed to work with asynchoronous operations(the operation that takes time to execute). you declare a  function as async by placing the async keywords before the function declaration.
+the primary purpose of an async function is to allow you to use the await keyword inside it, which simplifies working with promises and asynchronous code.
+inside an async function you can use await to pause the execution of the function untill a promsie is resolved, this makes the code appear more synchronous and easier to read.
+await(await):
+the await keyword is used inside an async funciton to wait for the resolution of a promsie. it can only be used with in a async function. when await is used the function pauses at that line untill the promise is resolved or rejected. this allows you to write code that appears sequential. even though its performing asynchronous tasks. If the proise is resolved the result of the promise is returned till that awaited is used. if it is rejected then it throws an  error that can be caught using try....catch
+-----------------------
+task: to create a schema for a hotel menu if the data type:
+"name": " Spicy Chicken Wings", 
+"price": 9.99, 
+"taste": "Spicy", 
+"is_drink": false, 
+"ingredients ": ["chicken wings", "spices", "sauce"], 
+"num_sales": 62 

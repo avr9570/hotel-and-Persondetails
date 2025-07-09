@@ -1,0 +1,28 @@
+Git & GitHub
+Git is like a time machine for your code.
+It is a tool that keeps a record of every version of your code, so you can always go back to a previous state if something goes wrong.
+Install Git: If you haven't already, download and install Git on your computer. You can get it from the official Git website:
+https://git-scm.com/downloads
+If you want to work with git in your project→
+Run git init inside the root folder of your project
+This command tells Git to start tracking changes in your project folder.turns all files to green. it means it is watching all the folder and taking a look ki what changes are being done what file id added but not commiting it. its like adding tracker to all the folder
+git status
+
+git status - tells the staus of the codde, if it is commited or not. if some folder appears red means those are untacked folders not added to the git. not saved to it,
+After making changes to your project (e.g., writing code), you'll want to save those changes in Git.
+git add
+The means "add all changes." You can replace it with specific file names with the '.'
+git keeps the snapsshots of every version of code to the root directory
+we never save node modules becoz it has high storage also it the files we req locally to run code but it is automatically managed by npm we dont neeed to save it. we dont track it ki ham usmai kya changes karre hai. we dont change it. so git ignore such folder
+
+GIT IGNORE
+gitignore
+The.gitignore file is a special configuration file used in Git repositories to specify files and directories that should be ignored by Git.
+These ignored files and directories won't be tracked by Git or included in version control.
+Create.gitignore File
+#Ignore node_modules directory
+node_modules/
+# other entries
+
+~ this savea a snapshot of your project's current state.
+git commit -m "initial commit"

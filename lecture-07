@@ -1,0 +1,100 @@
+see the schema diagram from which we willl come to know that how many end points are needed to be generated (diagram.net)
+
+      
+    database
+    operation          HTTP
+                     Methods
+C --- create-----------> POST
+R --- Read--------------> GET
+U --- Update-------------> PUT/PATCH
+D --- Delete--------------> DELETE
+Parametrised API calls :
+Now if someone told you to give a list of people who are only waiters (categorising based on their work)
+Then we can create an endpoint like this 
+/person/chef 
+/person/waiter 
+/person/manager 
+But this is not the correct method to create as many functions are here we can use parametrized endpoints 
+It can be dynamically inserted into the URL when making a request to the API. Becoz ultimately all the 3 are cat based on the work type
+endpoint - localhost:3000/person/:work (by simply adding : we are making work as an variable by passing parameter to url it can be named anything as its a variable)
+work = [ "chef", "waiter", "manager"] 
+app.get('/person/: workType', async (req, res) => { 
+try { 
+const workType = req.params.workType; // Extract(fetch) the work type and since work is a parameter so use params and varaibel is workType therefore params.workType means the data is sent on the url /person/:workType by the client so that works must be defined inside this workType variable so that if parameters is changed then the url is changed
+from the URL parameter 
+// Assuming you already have a Person model and MongoDB 
+connection set up 
+const persons await Person.find({ work: workType })}});
+URL - http://localhost:3000/person/chef 
+---------------------------------EXPRESS ROUTER ----------------------------------------------------
+EXPRESS ROUTER:
+~ WE HAVE a lot of end points in a single file server.js
+~ this makes bad experience in code readibility as well as code handling
+~ express router is a way to modularise and organise your route handling code in an express/js application. It is a feature of express.js
+~ so lets create a separate file to manage endpoints /person and /meanu
+~ express router is like a traffic cop for your web server. it knows where to send the trafic came by hitting a endpoint on a server
+~ express router helps you organise and manage these pages or endpoints in your web application. its like creating separate folders for different types of tasks.
+~ create a folder router --> personRoutes.js and menuitemRoutes.js
+~ for that lets create a folder caled routes so that all the end points are in route folder (no matter how many) but server.js file will have only packages installed
+~  AND FOR HANDS ON FOR THIS WE WILL USE SERVER1.JS FILE NOT SERVER.JS to organise the file 
+~ here personRouter is made by by taking endpoint code snippets from server.js file and replacing app by route and url parameter too.
+
+const express = require('express');
+const router = express. Router();
+// Define routes for /person
+router.get('/', (req, res) => {
+// Handle GET /person
+});
+router.post('/',(req, res) =>{
+    //Handle POST for /person
+});
+//USE the routers
+app.use("/person",personRoutes);
+--------------------------------------------------------------------------------------------------------------------------------------
+UPDATE OPERATION:
+
+Update Operation
+~We will update our person Record, for that we will create an endpoint from where we are able to update record
+~For Updation we need two things
+~Which record we want to update ?
+~What exactly we want to update?
+~For update we will use PUT method to create a endpoint
+~What is a unique identifier in a document in a collection?
+~It's_id which is given by mongodb itself, we will use this to find the particular record which we want to update
+-> And now we will send the data as same like we did in POST method.
+~ It is a combination of get and post method. get bcoz initially we have to find/get that document that needs to be updated using unique identifier i.e ID.
+~ here client send id to the server to find the doc initially.  that id represent id of that particular doc. we send unique id to the url of a particualr document. we will accept that id from client through that variable (/:id) in put request.
+app.put('/person/:id', async (req, res) => {
+    try {
+        const personId = req.params.id; // Extract the person's ID from the URL parameter
+        const updatedPersonData = req.body; // Updated data for the person
+
+        //assuming you have person model
+        const updatedperson = await person.findbyIDAndUpdate(personId, updatedPersonData,{ new: true, //return the updated document
+        runValidators: true, //run moongoose validation before saving the updated info});
+
+        if(!updatedPerson){
+            return res.status(404).json({error: 'person not found'});
+        }
+        //send the updated person data as a json response
+        res.json(ipdatedPerson);
+        catch(error){
+            /..../
+        }}})
+-----------------------------------------------------------------------------------------
+
+DELETE OPERATION
+
+We will Delete our person Record, for that we will create an endpoint from where we are able to delete record
+For Deletion we need one things
+Which record we want to update ?
+For delete we will use DELETE method to create a endpoint
+What is a unique identifier in a document in a collection ?
+It's_id which is given by mongodb itself, we will use this to find the particular record which we want to delete
+app.delete('/person/:id', async (req, res) => {
+try {
+const personId = req.params.id; // Extract the person's ID
+from the URL parameter
+// Assuming you have a Person model
+const deletedPerson = await Person.findByIdAndRemove (personId);
+}})
