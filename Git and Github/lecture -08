@@ -27,3 +27,14 @@ node_modules/
 git commit -m "initial commit"
 
 ~to remove node_modules after adding it to git add. is = git rm -r --cached node_modules
+-------------------------------------------------
+If you want to collaborate with others or back up your code online, or save this local code online you can create a remote repository on platforms like GitHub
+Link Your Local and Remote Repositories
+If you created a remote repository, you can link it to your local one
+git remote add origin https://github.com/yourusername/hotels.git
+Push Changes to Remote
+To send your local commits to the remote repository, use the git push command
+git push -u origin master.
+THIS CODE LOCALLY CAN BE PUSHED ON REMOTE REPO CONTINUSOUSLY 
+PULL CHANGES
+if you are collaborating with others you can fetch their changes and merge them into your code using git pull.
