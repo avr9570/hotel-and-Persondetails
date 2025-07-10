@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("./db");
+require('dotenv').config(); // Load environment variables from .env file
 // const person = require("./models/person");
 
 const app = express();
@@ -22,7 +23,12 @@ const menuitemRoutes = require('./Routes/menuitemRoutes');
 app.use('/menu', menuitemRoutes); 
  
 
-
+const PORT = process.env.PORT || 3000; // Use PORT from environment variables or if nothing iis there in .env then default to 3000
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+/*
 app.listen(3000, () => {
     console.log('Listening on port 3000');
 });
+*/
