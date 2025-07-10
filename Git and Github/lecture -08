@@ -72,3 +72,25 @@ In your server file (usually the main entry point of your application), require 
 require('dotenv').config(); //use this so that your server should also indentify the .env file variables so configuration is required. so add this line in server.js file (here server1.js. ONCE THIS .ENV FILE IS LOADED THEN ALL VARIABLES IN IT WILL BE TAKEN BY SERVER.JS FLE)
 use this require line in both server1.js and db.js here in our case 
 ~ add .env file to gitignore
+Remember to keep your env file secure and never commit it to a public version control system like Git, as it may contain sensitive information. Typically, you should include the env file in your project's .gitignore file to prevent accidental commits.
+
+Test MongoDB Cluster Postman
+
+Now we can test the MongoDB Cluster and check whether our data is present or not in the online DB
+
+Host NodeJS Server
+
+Now we are going to host our server so that our Application or Endpoints is accessible to all the user over the Internet.
+We are using localhost and our endpoints are only accessible within our computer
+We have to make it publicly available, so there are lots of company who helps us to make our application run 24*7
+Like, AWS, Google Cloud, etc. bût these charge too much amount for our application
+So we are going to use some free services to host our nodeJS application, which lots of company provides for developer purpose.
+Like, Heroku, Netlify, Render, etc
+-----------------------------------------------------------------------
+we want to shift app to a machine  having the node server runnig 24/7 so that code can be access or app can be run always even if local system is off so we have to shift our server remotelly like shift db and node server online and deplot it
+locallly to acces our server we hit localhost:3000 in browser url but to host online we haev to deploy online so that everyonce can access it
+so lets host the node server online for that i will use RENDER.
+in RENDER  where we host the original node server to a online machine's server that runs 24/7 bcoz that machine is active always and owener by them we just give our code to that machine
+~ here in local system we decide the port number by ourself n give it to the server and run our server on it but similarly for online server that has their own port number on whcih the server will be hosted which can be 3000 or may be not hence we use:
+const PORT = process.env.PORT || 3000;
+means macchine will run on that port given by them or run on default one
