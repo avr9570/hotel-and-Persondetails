@@ -78,8 +78,10 @@ handling HTTP requests. if you shut down db server, it will log the message to c
 const mongoose = require("mongoose");
 
 // Define the MongoDB connection URL
-const mongoURL = 'mongodb://127.0.0.1:27017/hotels'; // Replace 'mydatabase' with your database name
+//const mongoURL = 'mongodb://127.0.0.1:27017/hotels'; // Replace 'mydatabase' with your database name
 
+//remote database hosting
+const mongoURL = 'mongodb+srv://atharvaraut9570:Atharva@cluster0.oty2xel.mongodb.net/'
 // Set up MongoDB connection
 mongoose.connect(mongoURL, {
     useNewUrlParser: true,
