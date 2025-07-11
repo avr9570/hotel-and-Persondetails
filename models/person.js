@@ -31,6 +31,15 @@ const personSchema = new mongoose.Schema({
     salary: { // Salary of the person
         type: Number, 
         required: true
+    },
+    username: { // Username of the person
+        type: String, 
+        required: true,
+        unique: true // Unique constraint on username
+    },
+    password: { // Password of the person
+        type: String, 
+        required: true
     }
 });
 // Create a model(person model) based on the schema

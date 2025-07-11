@@ -1,0 +1,163 @@
+
+Middleware
+// Lecture 09: Middleware in Node.js
+Imagine you're at a restaurant, and you've placed an order for your favorite dish. Now, before that dish reaches your table, 
+it goes through several stages in the kitchen. Each stage involves different tasks, like chopping vegetables, cooking, and adding spices.
+Middleware is a bit like these stages in the kitchen-it's something that happens in between your request and the final response in a web application.
+Now, let's apply this idea to a web application, like the "Node Hotel" system:
+1. Request Phase:
+You (the client) make a request to the Node Hotel system. It could be asking for the menu, submitting a reservation, or anything else.
+2. Middleware Phase:
+Middleware is like the behind-the-scenes process in the kitchen. It's a series of functions that your request goes through before it reaches the final destination.
+3. Final Response Phase:
+After passing through the middleware, your request gets processed, and the system sends back a response. It could be the menu you requested or confirmation of your reservation.
+------------------------------------
+
+Example in Node.js:
+In the context of Node.js, imagine you want to log every request made to your "Node Hotel" application. You could use middleware for this.
+//Middleware Function
+const logRequest = (req, res, next) {
+console.log("[${new Date().toLocaleString()}] Request made to:
+${req.originalUrl}`);
+next(); // Move on to the next phase
+};
+// Using Middleware in Express
+const express = require('express');
+const app express();
+// Apply Middleware to all Routes
+app.use(logRequest);
+
+// Define Routes
+app.get('/menu', (req, res) => {
+    res.send('Here is the menu!');
+});
+--------
+to implememt middleware in our project we will use middleware function in code.
+for we want ki hotel application mai jitne bhi request jari hai vo sari log ho jaye. the date and time interval of the request made to api end point or the time user enterd the application. THIS IS CALLED LOGGING
+LOGGING IS A COMMON USE CASE FOR MIDDLEWARE it is a type of tool that can retrace no. of user requests made to the application and the time interval of the request made to api end point or the time user enterd the application. THIS IS CALLED LOGGING
+----------------------------
+the next() function is crucial in middleware. It tells the server to move on to the next middleware function or route handler. If you forget to call next(), your request will hang, and the server won't respond. it tell the code to enter next phase of execution, if we dont call next() then the code will not move to next phase and code will hang and will be stuck inside the middelware only no request will be made
+to use middleware, put the variable in the endpoint. in between the url and callback function of an get/post request.
+--------------------------------------
+In this example, logRequest is our middleware. It logs the time and the requested URL for every incoming request. 
+The app.use (logRequest) line tells Express to use this middleware for all routes.
+So, when you access any route (like / or /menu), the middleware runs first, logs the request, and then the route-specific code executes.
+In summary, middleware is like a series of tasks that happen behind the scenes in a web application. It's a way to add extra functionality to your application's request-response cycle, such as logging, authentication checks, or modifying request data, before it reaches its final destination.
+Why do we use the next() function in the middleware function??
+In Express.js, the next() function is a callback that signals to Express that the current middleware function has completed its processing and that it's time to move on to the next middleware function or route handler in the chain.
+--------------------------------------------------
+
+Imagine you're the manager of the "Node Hotel" application, and you want to ensure that only authorized staff members can access certain features. This is where authentication comes in.
+1. Verifying Identity (Authentication):
+Scenario: When a staff member, let's say a chef, wants to log in to the Node Hotel system, they need to prove that they are indeed the chef they claim to be.
+In Practice: In Node.js, authentication involves checking the chef's credentials, like a username and password, to make sure they match what's on record. It's like asking the chef to enter a secret code (password) and confirming that it's correct.
+2. Access Control (Authorization):
+Now, let's add a layer of authorization based on the roles of the staff members.
+Scenario: Once the chef has proven their identity, you, as the manager, want to control what they can and cannot do. For instance, chefs should be able to update the menu items, but maybe not manage staff salaries.
+In Practice: In Node.js, after authenticating the chef, you'll use authorization to decide what parts of the system they have access to. It's like giving the chef a key card (authorization) that lets them into the kitchen but not into the manager's office.
+---------------------------
+
+Implementation in Node.js:
+1. Authentication Middleware:
+In your Node.js application, you might use middleware like Passport to handle the authentication process.
+Passport helps verify the identity of the chef based on their provided credentials.
+2. User Roles and Permissions:
+You'll define roles for staff members (e.g., chef, waiter, manager).
+Authorization middleware will check the role of the authenticated user and grant access accordingly.
+3. Secure Endpoints:
+You'll protect certain routes (like updating menu items) with authentication checks.
+Only authenticated and authorized users (like chefs) will be allowed to access these routes.
+In the Hotel Context:
+Authentication: When Chef John logs in, the system checks if the provided username and password match what's on record for Chef John.
+Authorization: Once authenticated, Chef John is authorized to modify menu items but may not have permission to change other critical settings.
+
+The reason for this order is straightforward: before you can determine what someone is allowed to do (authorization), you need to know who they are (authentication). 
+Authentication establishes the identity, and authorization defines the permissions associated with that identity.
+--------------------
+
+In the context of web applications, middleware for authentication is typically applied first in the request-response cycle to verify the user's identity. If authentication is successful, the request proceeds to authorization middleware to determine what the authenticated user is allowed to do.
+It's important to note that while authentication and authorization are often discussed as distinct steps, they work together as essential components of a security strategy to control access to resources and protect against unauthorized actions.
+
+Now we will implement Authentication as a middleware Functiors. So that, Routes will be authenticated before reaching out to the server.
+Implementing authentication as a middleware function is a common and effective approach.
+Passport.js
+Passport.js is a popular authentication middleware for Node.js. Authentication is the process of verifying the identity of a user, typically through a username and password, before granting access to certain resources or features on a website or application.
+Think of Passport.js as a helpful tool that makes it easier for developers to handle user authentication in their Node.js applications. It simplifies the process of authenticating users by providing a set of pre-built strategies for different authentication methods, such as username and password, 
+social media logins (like Facebook or Google), and more.
+Herele e-bakdown of some key concepts in Passport.js:
+1. Middleware: In the context of web development, middleware is software that sits between the application and the server. Passport.js acts as middleware, intercepting requests and adding authentication-related functionality to them.
+2. Strategy: Passport.js uses the concept of strategies for handling different authentication methods. A strategy is a way of authenticating users. Passport.js comes with various built-in strategies, and you can also create custom strategies to support specific authentication providers.
+3. Serialize and Deserialize: Passport.js provides methods for serializing and deserializing user data. Serialization is the process of converting user data into a format that can be stored, usually as a unique identifier.
+ Deserialization is the reverse process of converting that unique identifier back into user data. These processes are essential for managing user sessions.
+ --------------------
+ install passport
+ Install Passport
+To use Passport.js in a Node.js application, you need to install the passport package along with the authentication strategies you intend to use.
+For this course, we are using Local strategies authentication (username and password).
+you would typically install passport-local
+
+npm install passport passport-local
+
+Once you've installed these packages, you can set up and configure Passport.js in your application.
+const express = require('express');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const app express();
+// Initialize Passport
+app.use(passport.initialize());
+---------------------------------------------
+
+Passport Local Strategy
+The Passport Local Strategy is a part of the Passport.js authentication middleware for Node.js. It's specifically designed for handling username and password-based authentication.
+The Passport Local Strategy, by default, expects to extract the username and password from the request body. 
+It is a common practice for username and password-based authentication systems to send the credentials as part of the request body, especially in login forms.
+it already has username and password and also client sends it then both are verified then the info at the endpoint is shown to the interfaec
+to use authentication passport, we add to add username and password in the schema of the routes and predefine it then client also send this username and pass then both are validated using verification function.
+--------------------------------------------
+
+Configure the Local Strategy
+Define and configure the Local Strategy using passport-local.
+You need to provide a verification function that checks the provided username and password is it even valid or not.
+passport.use(new LocalStrategy (
+  async (username, password, done) => {
+    // Your authentication logic here
+  } I
+));
+passport js give prebuilt stratergies one such is called local stratergy use to authenticate user by username and password just that is called local stratergy. different strategies are used for different authentication methods, such as OAuth, JWT, using google etc.
+passport is used as middle ware bcoz we want before hitting req and server se pahuchne se pehle authentication should be done (of request) that help to verify the genuine user
+here in local strgy. while making verification funt, it expect 3 call back functions are parameters
+In the Local Strategy's verification function, you typically query your database to find the user with the provided username provided by client. You then compare the provided password with the stored password.
+In the context of LocalStrategy, Passport.js expects the verification function to have the following signature:
+function (username, password, done)
+
+The done callback should always be the last parameter, and it's essential to maintain this order for Passport.js to work correctly. If you change the order of parameters, 
+you risk breaking the expected behavior of Passport.js.
+passport.use(new LocalStrategy (async (username, password, done) => {
+try {
+console.log('Received credentials:', username, password);
+const user = await Person.findOne({ username });
+if (!user)
+return done(null, false, { message: 'Incorrect username.' });
+const isPasswordMatch = (user.password === password? true : false);
+if (isPasswordMatch)
+return done(null, user);
+else
+return done(null, false, { message: 'Incorrect password.' })
+} catch (error) {
+return done(error);
+}
+}));
+----------------------------------------------
+
+In the context of Passport.js, done is a callback function that is provided by Passport to signal the completion of an authentication attempt. 
+It is used to indicate whether the authentication was successful, and if so, to provide information about the authenticated user.
+The done function takes three parameters: done (error, user, info).
+If the authentication is successful, you call done (null, user) where user is an object representing the authenticated user.
+If the authentication fails, you call done (null, false, { message: 'some message' }). The second parameter (false) indicates that authentication failed, and the third parameter is an optional info object that can be used to provide additional details about the failure.
+
+now to add authentication in a request steps are:
+1. Initialize Passport.js in your Express application:
+  app.use(passport.initialize());
+2. Define a route for user login: 
+  add passport.authenticate('name_of_stratergy', {session: false}) as middleware in the route.
+
